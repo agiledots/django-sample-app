@@ -1,36 +1,72 @@
-# Bootcamp
 
-[![Build Status](https://travis-ci.org/vitorfs/bootcamp.svg?branch=master)](https://travis-ci.org/vitorfs/bootcamp) [![Coverage Status](https://coveralls.io/repos/github/vitorfs/bootcamp/badge.svg?branch=master)](https://coveralls.io/github/vitorfs/bootcamp?branch=master) [![Requirements Status](https://requires.io/github/vitorfs/bootcamp/requirements.svg?branch=master)](https://requires.io/github/vitorfs/bootcamp/requirements/?branch=master)
+[install](https://github.com/vitorfs/bootcamp/wiki/Installing-and-Running-Bootcamp)
 
-Bootcamp is an open source **enterprise social network** built with [Python][0] using the [Django Web Framework][1].
-
-The project has three basic apps:
-
-* Feed (A Twitter-like microblog)
-* Articles (A collaborative blog)
-* Question & Answers (A Stack Overflow-like platform)
-
-## Feed App
-
-The Feed app has infinite scrolling, activity notifications, live updates for likes and comments, and comment tracking.
+#### create virtual env
+```
+    virtualenv venv
+    venv\Scripts\activate
+    (env) e:\
+```
 
 
-## Articles App
-
-The Articles app is a basic blog, with articles pagination, tag filtering and draft management.
-
-
-## Question & Answers App
-
-The Q&A app works just like Stack Overflow. You can mark a question as favorite, vote up or vote down answers, accept an answer and so on.
+####  Install dependencies
+```
+    (env) pip install -U -r requirements.txt
+```
 
 
-## Technology Stack
+#### update db settings
+```
+    # file ".env"
 
-- Python 2.7 / 3.5
-- Django > 1.9
-- Twitter Bootstrap 3
-- jQuery 2
+    DEBUG=True
+    SECRET_KEY=s3cr3t_key
+    DATABASE_URL=mysql://root:rootadmin@localhost:3306/opencv
+    ALLOWED_HOSTS=*
+```
+
+
+
+#### Syncdb
+```
+    (env) python manage.py migrate
+```
+
+#### Run
+```
+    (env) python manage.py runserver
+```
+
+
+### deploy to apache 
+
+#### copy static files
+```
+    (env) python manage.py collectstatic
+```
+
+#### apache mod_wsgi setting 
+```
+    LoadModule wsgi_module "E:\env\Lib\site-packages\mod_wsgi\server\mod_wsgi.cp36-win_amd64.pyd"
+
+    WSGIScriptAlias / "E:\source\django-sample-app\bootcamp\bootcamp\wsgi.py"
+    WSGIPythonHome "E:\source\django-sample-app\venv"
+    WSGIPythonPath "E:\source\django-sample-app\bootcamp"
+
+    <VirtualHost *:80>
+        ServerName www.example.com
+        
+        <Directory "E:\source\django-sample-app\bootcamp\bootcamp">
+            Require all granted
+        </Directory>
+        
+        Alias /static "E:\source\django-sample-app\bootcamp\staticfiles"
+        <Directory "E:\source\django-sample-app\bootcamp\staticfiles">
+            Require all granted
+        </Directory>
+
+    </VirtualHost>
+``` 
 
 
 ## Installation Guide
